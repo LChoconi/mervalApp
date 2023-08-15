@@ -8,6 +8,7 @@ import dash
 from dash import dcc, html, Input, Output, callback
 import dash_bootstrap_components as dbc
 import plotly.express as px
+from flask import Flask
 
 dateTodayVar = date.today()
 dateTodayVar = datetime.datetime.strptime(str(dateTodayVar),'%Y-%m-%d').strftime('%Y-%m-%d')
@@ -16,27 +17,7 @@ firstDateVar = datetime.datetime.strptime(str(firstDateVar),'%Y-%m-%d').strftime
 fixedTickersVar = ['ALUA.BA', 'BBAR.BA', 'BMA.BA', 'BYMA.BA', 'CEPU.BA', 'COME.BA', 'CRES.BA', 'EDN.BA', 'GGAL.BA', 'LOMA.BA', 'MIRG.BA',
                 'PAMP.BA', 'SUPV.BA', 'TECO2.BA', 'TGNO4.BA', 'TGSU2.BA', 'TRAN.BA', 'TXR.BA', 'VALO.BA', 'YPFD.BA', 'M.BA']
 
-def MervalUSD_multipletickers(firstDate=firstDateVar, lastDate=dateTodayVar, tickers=fixedTickersVar):
-    dataGGAL = yf.download(['GGAL.BA', 'GGAL'], start=firstDate, end=lastDate)
-    histCCL = dataGGAL["Adj Close"].dropna()  
-    histCCL = histCCL.reset_index() 
-    histCCL["USD"] = histCCL["GGAL.BA"]*10/histCCL["GGAL"]
-    histCCL = histCCL.drop(columns=['GGAL','GGAL.BA'])
-
-    dataPanelLider = yf.download(tickers, start=firstDate, end=lastDate)
-    dataMerval = dataPanelLider["Adj Close"].dropna() 
-    dataMerval['Index'] = range(1, len(dataMerval)+1)
-    dataMerval = dataMerval.reset_index()
-    dataMerval = pd.melt(dataMerval, id_vars='Date',
-                        var_name='Ticker', value_name='Close')
-    
-    dataMerval = pd.DataFrame(pd.merge(histCCL, dataMerval, how='left', on=['Date'])).dropna() 
-    dataMerval ['Close USD'] = dataMerval['Close']/dataMerval['USD']
-
-    dataMerval = dataMerval[~((dataMerval.Date=="2022-07-14") & (dataMerval.Ticker=="M.BA"))] ## Filter inaccurate data in Merval
-    return dataMerval, histCCL
-
-def MervalUSD_singleticker(firstDate=firstDateVar, lastDate=dateTodayVar, tickers=['M.BA']):
+def DataMervalUSD(firstDate=firstDateVar, lastDate=dateTodayVar, tickers=['M.BA']):
     dataGGAL = yf.download(['GGAL.BA', 'GGAL'], start=firstDate, end=lastDate)
     histCCL = dataGGAL["Adj Close"].dropna()  
     histCCL = histCCL.reset_index() 
@@ -56,6 +37,7 @@ def MervalUSD_singleticker(firstDate=firstDateVar, lastDate=dateTodayVar, ticker
 
 external_stylesheets = [dbc.themes.ZEPHYR]
 
+server = Flask(__name__)
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "Merval"
 app.layout = html.Div([
@@ -145,8 +127,9 @@ app.layout = html.Div([
     Input('my-date-picker-range', 'start_date'),
     Input('my-date-picker-range', 'end_date'))
 
+@server.route("/")
 def update_output(value, start_date, end_date):
-    dataTickers, dataFx = MervalUSD_singleticker(firstDate=start_date, lastDate=end_date,tickers=[value])
+    dataTickers, dataFx = DataMervalUSD(firstDate=start_date, lastDate=end_date,tickers=[value])
     dff = dataTickers[dataTickers["Ticker"] == value]
 
     fig1 = {
