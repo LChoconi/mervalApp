@@ -37,7 +37,7 @@ def DataMervalUSD(firstDate=firstDateVar, lastDate=dateTodayVar, tickers=['M.BA'
 
 external_stylesheets = [dbc.themes.ZEPHYR]
 
-server = Flask(__name__)
+
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "Merval"
 app.layout = html.Div([
@@ -127,7 +127,7 @@ app.layout = html.Div([
     Input('my-date-picker-range', 'start_date'),
     Input('my-date-picker-range', 'end_date'))
 
-@server.route("/")
+@app.route("/")
 def update_output(value, start_date, end_date):
     dataTickers, dataFx = DataMervalUSD(firstDate=start_date, lastDate=end_date,tickers=[value])
     dff = dataTickers[dataTickers["Ticker"] == value]
@@ -200,6 +200,3 @@ def update_output(value, start_date, end_date):
                                           }  
 
     return fig1, fig2, fig3
-                              
-              
-app.run_server(debug=True, use_reloader=True)
