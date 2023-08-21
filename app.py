@@ -94,21 +94,21 @@ app.layout = html.Div([
                                         dcc.Graph(id='lines_plot_USD',config={"displayModeBar": True,
                                                                               'displaylogo': False,
                                                                               'modeBarButtonsToRemove': ['select', 'zoomIn', 'zoomOut', 'autoScale']},
-                                                                               style={"width": 500, "height": 400}, figure={}),
+                                                                               style={"width": 600, "height": 400}, figure={}),
                                         width="auto"),
                                 
                                     dbc.Col(
                                         dcc.Graph(id='lines_plot_ARP',config={"displayModeBar": True,
                                                                               'displaylogo': False,
                                                                               'modeBarButtonsToRemove': ['select', 'zoomIn', 'zoomOut', 'autoScale']}, 
-                                                                              style={"width": 400, "height": 400}, figure={}),
+                                                                              style={"width": 600, "height": 400}, figure={}),
                                         width="auto"),
 
                                     dbc.Col(
                                         dcc.Graph(id='lines_plot_CCL',config={"displayModeBar": True,
                                                                               'displaylogo': False,
                                                                               'modeBarButtonsToRemove': ['select', 'zoomIn', 'zoomOut', 'autoScale']}, 
-                                                                              style={"width": 400, "height": 400}, figure={}),
+                                                                              style={"width": 600, "height": 400}, figure={}),
                                         width="auto"),
 
                                 ],
