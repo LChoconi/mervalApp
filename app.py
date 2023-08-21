@@ -8,7 +8,6 @@ import dash
 from dash import dcc, html, Input, Output, callback
 import dash_bootstrap_components as dbc
 import plotly.express as px
-from flask import Flask
 
 dateTodayVar = date.today()
 dateTodayVar = datetime.datetime.strptime(str(dateTodayVar),'%Y-%m-%d').strftime('%Y-%m-%d')
@@ -50,8 +49,7 @@ app.layout = html.Div([
                         dbc.Row(
                             [
                                 dbc.Col(
-                                    html.H3(
-                                    "Select Ticker:",
+                                    html.H3("Select Ticker:",
                                     style={'text-align': 'left', 'color':'#9B9C9B', "margin-bottom": "15px"}
                                     ),
                                     width="auto"),
@@ -69,8 +67,7 @@ app.layout = html.Div([
                                     ),
 
                                 dbc.Col(
-                                    html.H3(
-                                    "Select Date:",
+                                    html.H3("Select Date:",
                                     style={'text-align': 'left', 'color':'#9B9C9B', "margin-bottom": "15px"}
                                     ),
                                     width="auto"),
@@ -97,21 +94,21 @@ app.layout = html.Div([
                                         dcc.Graph(id='lines_plot_USD',config={"displayModeBar": True,
                                                                               'displaylogo': False,
                                                                               'modeBarButtonsToRemove': ['select', 'zoomIn', 'zoomOut', 'autoScale']},
-                                                                               style={"width": 800, "height": 500}, figure={}),
+                                                                               style={"width": 500, "height": 400}, figure={}),
                                         width="auto"),
                                 
                                     dbc.Col(
                                         dcc.Graph(id='lines_plot_ARP',config={"displayModeBar": True,
                                                                               'displaylogo': False,
                                                                               'modeBarButtonsToRemove': ['select', 'zoomIn', 'zoomOut', 'autoScale']}, 
-                                                                              style={"width": 800, "height": 500}, figure={}),
+                                                                              style={"width": 400, "height": 400}, figure={}),
                                         width="auto"),
 
                                     dbc.Col(
                                         dcc.Graph(id='lines_plot_CCL',config={"displayModeBar": True,
                                                                               'displaylogo': False,
                                                                               'modeBarButtonsToRemove': ['select', 'zoomIn', 'zoomOut', 'autoScale']}, 
-                                                                              style={"width": 800, "height": 500}, figure={}),
+                                                                              style={"width": 400, "height": 400}, figure={}),
                                         width="auto"),
 
                                 ],
